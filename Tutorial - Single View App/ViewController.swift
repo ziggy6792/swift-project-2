@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionCount = 0
+    let noOfQuetions = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,8 +44,22 @@ class ViewController: UIViewController {
         button1.setImage(UIImage(named: countries[0]), for: .normal)
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
+    
+        let question = countries[correctAnswer].uppercased()
         
-        title = countries[correctAnswer].uppercased()
+        title = "Score: (\(score)) - \(question)?"
+        questionCount += 1
+    }
+    
+    func endGame(action: UIAlertAction! = nil){
+     
+        title = "Final Score (\(score))"
+        
+        button1.isHidden = true
+        button2.isHidden = true
+        button3.isHidden = true
+    
+     
     }
     
     
@@ -53,15 +69,25 @@ class ViewController: UIViewController {
             title = "Correct"
             score += 1
         }else{
-            title = "Wrong"
+            title = "Wrong! The answer is flag \(correctAnswer+1)"
             score -= 1
         }
         
-        let ac = UIAlertController(title: title, message: "Your score is \(score)",preferredStyle: .alert)
+        if(questionCount == noOfQuetions) {
+            let ac = UIAlertController(title: title, message: "Your score is \(score)",preferredStyle: .alert)
+            
+            ac.addAction(UIAlertAction(title: "Game Finished", style: .default, handler: endGame))
+            
+            present(ac,animated: true)
+        }else{
+            let ac = UIAlertController(title: title, message: "Your score is \(score)",preferredStyle: .alert)
+            
+            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+            
+            present(ac,animated: true)
+        }
         
-        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
-        
-        present(ac,animated: true)
+      
     }
     
 }
